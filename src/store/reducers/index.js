@@ -1,23 +1,15 @@
 const initialState = {
-  userAuthorised: false,
-  userToken: "",
+  userEmail: "",
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case "USER_AUTHORISED":
-      if (action.userToken) {
-        return {
-          ...state,
-          userAuthorised: true,
-          userToken: action.userToken,
-        };
-      } else {
-        return {
-          ...state,
-          userAuthorised: true,
-        };
-      }
+    case "SET_USER_EMAIL":
+      return {
+        ...state,
+        userEmail: action.userEmail,
+      };
+
     default:
       return state;
   }

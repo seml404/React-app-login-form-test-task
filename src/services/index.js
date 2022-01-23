@@ -1,19 +1,28 @@
 export function validateInput(type, value) {
   switch (type) {
     case "email":
-      if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)) {
+      if (
+        !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
+        value.length > 255
+      ) {
         return { email: true };
       } else {
         return { email: false };
       }
     case "phone":
-      if (!/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/.test(value)) {
+      if (
+        !/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/.test(value) ||
+        value.length > 255
+      ) {
         return { phone: true };
       } else {
         return { phone: false };
       }
     case "name":
-      if (!/[a-zA-zА-Яа-я]+\s[a-zA-zА-Яа-я]+/.test(value)) {
+      if (
+        !/[a-zA-zА-Яа-я]+\s[a-zA-zА-Яа-я]+/.test(value) ||
+        value.length > 255
+      ) {
         return { name: true };
       } else {
         return { name: false };
@@ -24,7 +33,7 @@ export function validateInput(type, value) {
       let hasCapLettExp = /([A-Z])+/;
       let hasDigit = /(\d)+/;
       let specSymbol = /\W/;
-      let longEnough = /(.){6,}/;
+      let longEnough = /(.){8,}/;
       let testRes =
         hasSmallLettExp.test(value) &&
         hasCapLettExp.test(value) &&
@@ -41,35 +50,30 @@ export function validateInput(type, value) {
   }
 }
 
-export async function requestAuthorization(value, navFunc) {
+export async function submitRequest(data, urlType, navFunc) {
   try {
-    let requestResult = await fetch("http://localhost:3000/users");
-    let resultJson = await requestResult.json();
-    if (resultJson.find((item) => item.email === value)) {
-      navFunc("/authorise");
-    } else {
-      navFunc("/register");
+    let requestResult = await fetch(
+      `https://lumus.wistis.ru/api/v1/auth/${urlType}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    console.log(requestResult);
+    let resParsed = await requestResult.json();
+    console.log(resParsed);
+    if (navFunc) {
+      if (resParsed.exists) {
+        navFunc("/authorise");
+      } else {
+        navFunc("/register");
+      }
     }
   } catch (error) {
-    console.log(console.log(error));
-  }
-}
-
-export async function registerNewUser(data) {
-  let newUser = {
-    ...data,
-  };
-  console.log(newUser);
-  try {
-    let requestResult = await fetch("http://localhost:3000/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json;charset=utf-8",
-      },
-      body: JSON.stringify(data),
-    });
-    console.log(requestResult);
-  } catch (error) {
-    console.log(console.log(error));
+    throw new Error(error);
   }
 }

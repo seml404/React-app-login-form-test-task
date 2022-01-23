@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { validateInput, requestAuthorization } from "../services";
+import { validateInput, submitRequest } from "../services";
+import { setUserEmail } from "../store/actions";
 import FormInput from "./FormInput";
 import Form from "./Form";
+import { connect } from "react-redux";
 
-export default function LoginOrAuthorize() {
+function LoginOrAuthorize(props) {
   let fields = { email: "" };
+  const { setUserEmail } = props;
   let [userData, setUserData] = useState({ ...fields });
   let [entryError, setEntryError] = useState({ ...fields });
   const navigate = useNavigate();
@@ -13,7 +16,8 @@ export default function LoginOrAuthorize() {
   function handleSubmit(e) {
     e.preventDefault();
     if (!entryError.email) {
-      requestAuthorization(userData.email, navigate);
+      submitRequest({ email: userData.email }, "check-email", navigate);
+      setUserEmail(userData.email);
     }
   }
 
@@ -37,6 +41,7 @@ export default function LoginOrAuthorize() {
     formTitle: "Вход или регистрация",
     handleSubmit: handleSubmit,
     btnTitle: "Продолжить",
+    disabledProp: userData.email ? false : true,
     formFooterContent: (
       <div className="social-media-icons">
         <div className="social-media-icon"> </div>
@@ -66,3 +71,9 @@ export default function LoginOrAuthorize() {
     </>
   );
 }
+
+const mapDispatchToProps = {
+  setUserEmail,
+};
+
+export default connect(null, mapDispatchToProps)(LoginOrAuthorize);

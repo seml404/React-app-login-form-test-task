@@ -1,8 +1,8 @@
-const authoriseUser = (userToken) => {
+const setUserEmail = (userEmail) => {
   return {
-    type: "USER_AUTHORISED",
-    userToken,
+    type: "SET_USER_EMAIL",
+    userEmail,
   };
 };
 
-export { authoriseUser };
+export { setUserEmail };

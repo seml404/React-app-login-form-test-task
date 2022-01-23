@@ -1,27 +1,39 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { validateInput } from "../services";
+import { validateInput, submitRequest } from "../services";
 import FormInput from "./FormInput";
 import Form from "./Form";
+import { connect } from "react-redux";
 
-export default function Authorization() {
+function Authorization(props) {
+  const { userEmail } = props;
   let fields = { email: "", password: "" };
-  let [userData, setUserData] = useState({ ...fields });
+  let [userData, setUserData] = useState({ ...fields, email: userEmail });
   let [entryError, setEntryError] = useState({ ...fields });
 
   function handleInputChange(event) {
-    console.log(event);
     setUserData((prev) => {
       return {
         ...prev,
         [event.target.name]: event.target.value,
       };
     });
+    let inputValidation = validateInput(event.target.name, event.target.value);
+    setEntryError((prev) => {
+      return {
+        ...prev,
+        ...inputValidation,
+      };
+    });
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(userData);
+    if (!entryError.email && !entryError.password) {
+      if (userData.email && userData.password) {
+        submitRequest(userData, "login");
+      }
+    }
   }
 
   let formProps = {
@@ -29,7 +41,6 @@ export default function Authorization() {
     handleSubmit: handleSubmit,
     btnTitle: "Войти",
     disabledProp: !userData.email || !userData.password,
-
     formFooterContent: (
       <p>
         <a className="link-bold" href="#">
@@ -77,3 +88,11 @@ export default function Authorization() {
     </>
   );
 }
+
+const mapStateToProps = (state) => {
+  return {
+    userEmail: state.userEmail,
+  };
+};
+
+export default connect(mapStateToProps)(Authorization);

@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { validateInput, registerNewUser } from "../services";
+import { validateInput, submitRequest } from "../services";
 import FormInput from "./FormInput";
 import Form from "./Form";
+import { connect } from "react-redux";
 
-export default function Registration() {
+function Registration(props) {
+  const { userEmail } = props;
   let fields = { email: "", password: "", name: "", phone: "" };
-  let [userData, setUserData] = useState({ ...fields });
+  let [userData, setUserData] = useState({ ...fields, email: userEmail });
   let [entryError, setEntryError] = useState({ ...fields });
   const navigate = useNavigate();
 
@@ -24,7 +26,7 @@ export default function Registration() {
         userData.name &&
         userData.phone
       ) {
-        registerNewUser(userData);
+        submitRequest(userData, "register");
       }
     }
   }
@@ -84,7 +86,7 @@ export default function Registration() {
       onChangeProp: handleInputChange,
       errorProp: entryError.password,
       errorMessage:
-        "Пароль должен включать прописную и заглавную буквы, цифру, спецсимвол и быть длиной мин. 6 знаков",
+        "Пароль должен включать прописную и заглавную буквы, цифру, спецсимвол и быть длиной мин. 8 знаков",
     },
     {
       inputLabelProp: "Имя Фамилия",
@@ -122,3 +124,11 @@ export default function Registration() {
     </>
   );
 }
+
+const mapStateToProps = (state) => {
+  return {
+    userEmail: state.userEmail,
+  };
+};
+
+export default connect(mapStateToProps)(Registration);
