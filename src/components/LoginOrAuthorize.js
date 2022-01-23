@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { validateInput, requestAuthorization } from "../services";
+import FormInput from "./FormInput";
+import Form from "./Form";
 
 export default function LoginOrAuthorize() {
   let fields = { email: "" };
@@ -31,45 +33,36 @@ export default function LoginOrAuthorize() {
     });
   }
 
+  let formProps = {
+    formTitle: "Вход или регистрация",
+    handleSubmit: handleSubmit,
+    btnTitle: "Продолжить",
+    formFooterContent: (
+      <div className="social-media-icons">
+        <div className="social-media-icon"> </div>
+      </div>
+    ),
+  };
+
+  let inputProps = [
+    {
+      inputLabelProp: "E-mail",
+      classProp: entryError.email ? "input input-error" : "input",
+      valueProp: userData.email,
+      typeProp: "text",
+      nameProp: "email",
+      placeholderProp: "E-mail",
+      onChangeProp: handleInputChange,
+      errorProp: entryError.email,
+      errorMessage: "Неправильный формат электронной почты",
+    },
+  ];
+
   return (
     <>
-      <div className="form-wrapper">
-        <div className="form-top">
-          <h2 className="submain-title">Вход или регистрация</h2>
-          <button className="btn btn-close">&#10006;</button>
-        </div>
-        <form className="form" onSubmit={(e) => handleSubmit(e)}>
-          <div className="input-container">
-            <p className="input-label">E-mail</p>
-            <input
-              onFocus={() => setEntryError({ email: false })}
-              className={entryError.email ? "input input-error" : "input"}
-              value={userData.email}
-              type="text"
-              name="email"
-              placeholder="E-mail"
-              onChange={(e) => handleInputChange(e)}
-            ></input>
-            {entryError.email && (
-              <p className="error-message">
-                Неправильный формат электронной почты
-              </p>
-            )}
-          </div>
-          <button
-            disabled={userData.email ? false : true}
-            className="btn btn-main"
-            onClick={(e) => handleSubmit(e)}
-          >
-            <div>Продолжить</div>
-          </button>
-        </form>
-        <div className="form-footer">
-          <div className="social-media-icons">
-            <div className="social-media-icon"> </div>
-          </div>
-        </div>
-      </div>
+      <Form formProps={formProps}>
+        <FormInput inputProp={inputProps[0]}></FormInput>
+      </Form>
     </>
   );
 }

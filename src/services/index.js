@@ -1,4 +1,4 @@
-export function validateInput(type, value, setterFunc) {
+export function validateInput(type, value) {
   switch (type) {
     case "email":
       if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)) {
@@ -6,39 +6,36 @@ export function validateInput(type, value, setterFunc) {
       } else {
         return { email: false };
       }
-
     case "phone":
       if (!/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/.test(value)) {
         return { phone: true };
       } else {
         return { phone: false };
       }
-
     case "name":
       if (!/[a-zA-zА-Яа-я]+\s[a-zA-zА-Яа-я]+/.test(value)) {
         return { name: true };
       } else {
         return { name: false };
       }
-
     case "password":
+      console.log("validating pass");
       let hasSmallLettExp = /([a-z])+/;
       let hasCapLettExp = /([A-Z])+/;
       let hasDigit = /(\d)+/;
       let specSymbol = /\W/;
       let longEnough = /(.){6,}/;
-      if (
+      let testRes =
         hasSmallLettExp.test(value) &&
         hasCapLettExp.test(value) &&
         hasDigit.test(value) &&
         longEnough.test(value) &&
-        specSymbol.test(value)
-      ) {
+        specSymbol.test(value);
+      if (!testRes) {
         return { password: true };
       } else {
         return { password: false };
       }
-
     default:
       return false;
   }

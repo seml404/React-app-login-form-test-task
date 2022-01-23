@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { validateInput } from "../services";
+import FormInput from "./FormInput";
+import Form from "./Form";
 
 export default function Authorization() {
   let fields = { email: "", password: "" };
   let [userData, setUserData] = useState({ ...fields });
-  let [fieldTouched, setFieldTouched] = useState({ ...fields });
   let [entryError, setEntryError] = useState({ ...fields });
 
   function handleInputChange(event) {
@@ -21,46 +24,56 @@ export default function Authorization() {
     console.log(userData);
   }
 
-  return (
-    <>
-      <div className="form-wrapper">
-        <div className="form-top">
-          <h2 className="submain-title">Вход или регистрация</h2>
-          <button className="btn-close">&#10006;</button>
-        </div>
-        <form className="form" onSubmit={(e) => handleSubmit(e)}>
-          <div className="input-container">
-            <p className="input-label">E-mail</p>
-            <input
-              className={entryError.email ? "input input-error" : "input"}
-              value={userData.email}
-              type="text"
-              placeholder="E-mail"
-              name="email"
-              onChange={(e) => handleInputChange(e)}
-            ></input>
-            <p className="error-message">Error message here</p>
-          </div>
-          <div className="input-container">
-            <p className="input-label">Пароль</p>
-            <input
-              className={entryError.password ? "input input-error" : "input"}
-              value={userData.password}
-              type="password"
-              placeholder="Пароль"
-              name="password"
-              onChange={(e) => handleInputChange(e)}
-            ></input>
-            <p className="error-message">Error message here</p>
-          </div>
-          <button className="btn btn-main" onClick={(e) => handleSubmit(e)}>
-            <div>Войти</div>
-          </button>
-        </form>
+  let formProps = {
+    formTitle: "Вход",
+    handleSubmit: handleSubmit,
+    btnTitle: "Войти",
+    disabledProp: !userData.email || !userData.password,
+
+    formFooterContent: (
+      <p>
         <a className="link-bold" href="#">
           Забыли пароль?
         </a>
-      </div>
+      </p>
+    ),
+  };
+
+  let inputProps = [
+    {
+      inputLabelProp: "E-mail",
+      classProp: entryError.email ? "input input-error" : "input",
+      valueProp: userData.email,
+      typeProp: "email",
+      nameProp: "email",
+      placeholderProp: "E-mail",
+      onChangeProp: handleInputChange,
+      errorProp: entryError.email,
+      errorMessage: "Неправильный формат электронной почты",
+    },
+    {
+      inputLabelProp: "Пароль",
+      classProp: entryError.password ? "input input-error" : "input",
+      valueProp: userData.password,
+      typeProp: "password",
+      nameProp: "password",
+      placeholderProp: "Пароль",
+      onChangeProp: handleInputChange,
+      errorProp: entryError.password,
+      errorMessage:
+        "Пароль должен включать прописную и заглавную буквы, цифру, спецсимвол и быть длиной мин. 6 знаков",
+    },
+  ];
+
+  return (
+    <>
+      <Form formProps={formProps}>
+        {inputProps.map((item) => {
+          return (
+            <FormInput key={item.inputLabelProp} inputProp={item}></FormInput>
+          );
+        })}
+      </Form>
     </>
   );
 }
