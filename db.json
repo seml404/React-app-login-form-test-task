@@ -1,0 +1,25 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "email": "test@gmail.com",
+      "password": "1234",
+      "name": "Ivan Petrov",
+      "phone": "8901341234"
+    },
+    {
+      "id": "2",
+      "email": "1111@gmail.com",
+      "password": "12345",
+      "name": "Ivan Veselov",
+      "phone": "89093423454"
+    },
+    {
+      "email": "2134@gmail.com",
+      "password": "1234512",
+      "name": "sdf asdf",
+      "phone": "2143123456",
+      "id": "KeWTSHq"
+    }
+  ]
+}
