@@ -57,9 +57,9 @@ function Registration(props) {
       !userData.name ||
       !userData.phone,
     formFooterContent: (
-      <p>
+      <p className="form-footer-text">
         Нажимая на "Создать аккаунт", вы соглашаетесь с
-        <a> Политикой обработки данных</a>
+        <a className="link"> Политикой обработки данных</a>
       </p>
     ),
   };

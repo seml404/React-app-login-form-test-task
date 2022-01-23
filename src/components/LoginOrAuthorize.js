@@ -5,6 +5,10 @@ import { setUserEmail } from "../store/actions";
 import FormInput from "./FormInput";
 import Form from "./Form";
 import { connect } from "react-redux";
+import vk from "../assets/vkIcon.png";
+import google from "../assets/googleIcon.png";
+import fb from "../assets/fbIcon.png";
+import apple from "../assets/appleIcon.png";
 
 function LoginOrAuthorize(props) {
   let fields = { email: "" };
@@ -37,15 +41,30 @@ function LoginOrAuthorize(props) {
     });
   }
 
+  let socialMediaIcons = [vk, google, fb, apple];
+
   let formProps = {
     formTitle: "Вход или регистрация",
     handleSubmit: handleSubmit,
     btnTitle: "Продолжить",
     disabledProp: userData.email ? false : true,
     formFooterContent: (
-      <div className="social-media-icons">
-        <div className="social-media-icon"> </div>
-      </div>
+      <>
+        <p className="form-footer-text form-footer-text-big">Или</p>
+        <div className="social-media-icons">
+          {socialMediaIcons.map((icon) => {
+            return (
+              <button className="btn btn-social-media">
+                <img
+                  src={icon}
+                  alt="social-icon"
+                  className="social-media-icon"
+                ></img>
+              </button>
+            );
+          })}
+        </div>
+      </>
     ),
   };
 

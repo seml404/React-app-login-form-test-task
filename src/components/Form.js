@@ -14,9 +14,15 @@ export default function Form(props) {
       </div>
       <form className="form" onSubmit={(e) => handleSubmit(e)}>
         {props.children}
-        <button className="btn btn-main" type="submit" disabled={disabledProp}>
-          <div>{btnTitle}</div>
-        </button>
+        <div className="btn-main-container">
+          <button
+            className="btn btn-main"
+            type="submit"
+            disabled={disabledProp}
+          >
+            <p>{btnTitle}</p>
+          </button>
+        </div>
       </form>
       <div className="form-footer">{formFooterContent}</div>
     </div>

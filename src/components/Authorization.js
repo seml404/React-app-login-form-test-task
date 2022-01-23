@@ -42,8 +42,8 @@ function Authorization(props) {
     btnTitle: "Войти",
     disabledProp: !userData.email || !userData.password,
     formFooterContent: (
-      <p>
-        <a className="link-bold" href="#">
+      <p className="form-footer-text form-footer-text-big">
+        <a className="link link-bold" href="#">
           Забыли пароль?
         </a>
       </p>
